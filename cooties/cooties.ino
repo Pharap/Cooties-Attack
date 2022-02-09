@@ -1,5 +1,7 @@
 #include "general.h"
 
+#include "Levels/Level0.h"
+
 void updateTitleScreen()
 {
   anim();
@@ -9,6 +11,8 @@ void updateTitleScreen()
 
 void updateGame()
 {
+  drawRoom();
+
   drawCooties();
   moveEnemy();
   
@@ -65,12 +69,10 @@ void setup()
 {
   arduboy.begin();
   arduboy.setFrameRate(60);
-  arduboy.clear();
-  arduboy.display();
-  
 
   initBullets();
   initEnemies();
+  loadRoom(room0);
 
   hero.x = 64;
   hero.y = 32;

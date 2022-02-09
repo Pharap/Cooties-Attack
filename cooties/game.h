@@ -1,13 +1,18 @@
 #pragma once
 #include "general.h"
 
+#include "Tile.h"
+
+// For memcpy_P
+#include <avr/pgmspace.h>
+
 Arduboy2 arduboy;
 Sprites sprite;
 Font3x5 font3x5 = Font3x5(8);
 //BeepPin1 beep;
 ArduboyTones sound(arduboy.audio.enabled);
 
-uint8_t level=0;
+uint8_t level = 0;
 
 bool facingUp;
 
@@ -24,6 +29,61 @@ uint8_t hide_w = 0;
 // Title screen
 uint8_t title_frame = 0;
 uint8_t push_frame = 0;
+
+
+constexpr uint8_t roomWidth = 16;
+constexpr uint8_t roomHeight = 8;
+
+constexpr uint8_t tileWidth = 8;
+constexpr uint8_t tileHeight = 8;
+
+Tile room[roomHeight][roomWidth] {};
+
+inline void loadRoom(const Tile (& progmemRoom)[roomHeight][roomWidth])
+{
+  memcpy_P(&room[0][0], &progmemRoom[0][0], sizeof(room));
+}
+
+inline void drawTile(Tile tile, int16_t x, int16_t y)
+{
+  switch(tile)
+  {
+    case Tile::Floor:
+      // Don't draw anything
+      break;
+
+    case Tile::Wall:
+      // Draw as a rectangle for now
+      arduboy.drawRect(x, y, 8, 8, WHITE);
+      break;
+
+    case Tile::Door:
+      // Draw as a circle for now
+      arduboy.drawCircle(x + 4, y + 4, 4, WHITE);
+      break;
+
+    case Tile::Spikes:
+      // Draw as a filled circle for now
+      arduboy.fillCircle(x + 4, y + 4, 4, WHITE);
+      break;
+  }
+}
+
+inline void drawRoom()
+{
+  for(uint8_t y = 0; y < roomHeight; ++y)
+  {
+    int16_t drawY = (static_cast<int16_t>(y) * tileHeight);
+
+    for(uint8_t x = 0; x < roomWidth; ++x)
+    {
+      int16_t drawX = (static_cast<int16_t>(x) * tileWidth);
+
+      // To Do: Replace this with sprite drawing
+      drawTile(room[y][x], drawX, drawY);
+    }
+  }
+}
 
 uint8_t findUnusedBullet() {
   uint8_t bulletNum;
