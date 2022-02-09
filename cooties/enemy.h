@@ -31,7 +31,7 @@ void drawCooties() {
     }
 
     for (uint8_t i = 0; i < targets; i++) {
-      sprite.drawPlusMask(cootie[i].x,cootie[i].y,cootie_sp, cootie[i].frame);
+      sprite.drawPlusMask(cootie[i].x, cootie[i].y, cootie_sp, cootie[i].frame);
     }
 }
 
@@ -41,23 +41,24 @@ void moveEnemy() {
           for (uint8_t j = 0; j < targets; j++) {
               if (i != j) {
                   if (!arduboy.collide(cootie[i], cootie[j])) {
-                    if (cootie[i].x<hero.x) {
-                        cootie[i].x++;
+                    if (cootie[i].x < hero.x) {
+                      cootie[i].x++;
                     } else {
                       cootie[i].x--;
                     }
 
-                    if (cootie[i].y<hero.y) {
-                        cootie[i].y++;
+                    if (cootie[i].y < hero.y) {
+                      cootie[i].y++;
                     } else {
                       cootie[i].y--;
                     }
                   } else {
                     //cootie[i].enable=false;
-                    cootie[i].x=cootie[i].x-4;
-                    cootie[j].x=cootie[j].x+4;
-                    cootie[i].y=cootie[i].y-4;
-                    cootie[j].y=cootie[j].y+4;
+                    cootie[i].x -= 4;
+                    cootie[i].y -= 4;
+
+                    cootie[j].x += 4;
+                    cootie[j].y += 4;
                   }
               }
           }

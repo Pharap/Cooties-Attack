@@ -13,7 +13,7 @@ bool facingUp;
 
 // Declarations
 void setLevel();
- 
+
 uint16_t hitCount = 0;
 uint16_t enemyHit = 0;
 
@@ -58,12 +58,12 @@ void anim() {
     }
   }
 
-  if (arduboy.pressed(UP_BUTTON) or arduboy.pressed(DOWN_BUTTON)
-      or arduboy.pressed(LEFT_BUTTON)or arduboy.pressed(RIGHT_BUTTON)) {
+  if (arduboy.pressed(UP_BUTTON) || arduboy.pressed(DOWN_BUTTON)
+      || arduboy.pressed(LEFT_BUTTON) || arduboy.pressed(RIGHT_BUTTON)) {
           if(arduboy.everyXFrames(5)) {
               hero.frame++;
           }
-          
+
           if (!facingUp && hero.frame >= 2) {
               hero.frame = 0;
           }
@@ -75,11 +75,11 @@ void anim() {
 
     for (uint8_t i = 0; i < 10; i++) {
       if(arduboy.everyXFrames(8)) {
-              cootie[i].frame++;
+        cootie[i].frame++;
       }
 
       if (cootie[i].frame >=2) {
-          cootie[i].frame=0;
+        cootie[i].frame=0;
       }
     }
 }
@@ -91,19 +91,19 @@ void input() {
 
   if (state == State::Title or state == State::GameOver) {
     if (arduboy.justPressed(A_BUTTON)) {
-      //reset stats
+      // Reset stats
       hero.life = 3;
       hero.x = 64;
       hero.y = 32;
       hitCount = 0;
       level = 1;
 
-      //reset cooties
+      // Reset cooties
       for (uint8_t i = 0; i < targets; i++) {
         cootie[i].enable = false;
       }
 
-      //change state
+      // Change state
       state = State::Game;
     }
   }
@@ -143,15 +143,15 @@ void input() {
       uint8_t bulletNum = findUnusedBullet();
 
       // If we get an unused bullet
-      if (bulletNum != bullets) { 
+      if (bulletNum != bullets) {
         // Set the start position. (A positive X indicates bullet in use)
         bullet[bulletNum].x = hero.x;
-        
+
         // Part way down the player
         bullet[bulletNum].y = hero.y + 3;
 
         // Uncomment this to fix the bug
-        //bullet[bulletNum].direction = hero.direction; 
+        //bullet[bulletNum].direction = hero.direction;
         sound.tone(NOTE_B5, 10);
 
         // Start the delay counter for the next bullet
@@ -194,29 +194,29 @@ void moveBullets()
         // Move bullet right
         ++bullet[bulletNum].x;
       }
-      
+
       if(bullet[bulletNum].direction == Direction::Left)
       {
         // Move bullet left
         --bullet[bulletNum].x;
       }
-      
+
       if(bullet[bulletNum].direction == Direction::Up)
       {
         // Move bullet up
         --bullet[bulletNum].y;
       }
-      
+
       if(bullet[bulletNum].direction == Direction::Down)
       {
         // Move bullet down
         ++bullet[bulletNum].y;
       }
-      
+
       // If off screen
       if (bullet[bulletNum].x >= arduboy.width() || (bullet[bulletNum].x == 0)
       || bullet[bulletNum].y >= arduboy.height() || (bullet[bulletNum].y == 0))
-      { 
+      {
         // Set bullet as unused
         bullet[bulletNum].x = bulletOff;
       }
@@ -237,15 +237,15 @@ void drawBullets() {
 void checkCollisions() {
   for (uint8_t i = 0; i < targets; i++) {
     if (cootie[i].life <= 0) {
-          setLevel();
-          cootie[i].enable = false;
-          ++level;
-        }
+      setLevel();
+      cootie[i].enable = false;
+      ++level;
+    }
 
-  // Check if enemy touch the hero
-    if (arduboy.collide(cootie[i],hero) && hero.iframe == 0) {
+    // Check if enemy touch the hero
+    if (arduboy.collide(cootie[i], hero) && (hero.iframe == 0)) {
       ++enemyHit;
-      hero.iframe=50;
+      hero.iframe = 50;
 
       sound.tone(NOTE_C5, 10);
 
@@ -253,25 +253,25 @@ void checkCollisions() {
       delay(20);
       arduboy.invert(false);
 
-      if (hero.life>0) {
+      if (hero.life > 0) {
         --hero.life;
 
-        if (hitCount>10) {
-          hitCount = hitCount-10;
+        if (hitCount > 10) {
+          hitCount -= 10;
         }
       }
     }
 
-  // Check if bullet hit the enemy
+    // Check if bullet hit the enemy
     for (uint8_t bulletNum = 0; bulletNum < bullets; ++bulletNum) {
-      if (hero.iframe==0 && arduboy.collide(bullet[bulletNum], cootie[i])) {
+      if ((hero.iframe == 0) && arduboy.collide(bullet[bulletNum], cootie[i])) {
         ++hitCount;
         if (cootie[i].life > 0) {
           --cootie[i].life;
         }
-        
+
         // Set bullet as unused
-        bullet[bulletNum].x = bulletOff;  
+        bullet[bulletNum].x = bulletOff;
       }
     }
   }
