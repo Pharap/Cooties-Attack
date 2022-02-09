@@ -66,26 +66,18 @@ void moveEnemy() {
 }
 
 void setLevel() {
-  if (level == 5 && targets < maxTargets) {
-    if (maxLife<6) {
-      ++maxLife;
-    }
-  }
+  // If the number of targets has reached the maximum
+  if (targets >= maxTargets)
+    // Exit the function
+    return;
 
-  if (level == 10 && targets < maxTargets) {
-    if (maxLife<6) {
-      ++maxLife;
-    }
-  }
-
-  if (level == 15 && targets < maxTargets) {
-    if (maxLife<6) {
-      ++maxLife;
-    }
-  }
-
-  if (level == 20 && targets < maxTargets) {
-    if (maxLife<6) {
+  // Every 5th level, up to level 20
+  if (((level % 5) == 0) && (level <= 20))
+  {
+    // If the player has less than 6 maximum lives
+    if (maxLife < 6)
+    {
+      // Increase the number of maximum lives
       ++maxLife;
     }
   }

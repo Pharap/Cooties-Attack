@@ -279,18 +279,22 @@ void checkCollisions() {
 
 // Check life and hide hearts
 void setLife() {
-  if (hero.life <= 3) {
-    if (hero.life == 3) {
+  switch (hero.life)
+  {
+    case 3:
       hide_w = 0;
-    }
-    if (hero.life == 2) {
+      break;
+
+    case 2:
       hide_w = 9;
-    }
-    if (hero.life == 1) {
+      break;
+
+    case 1:
       hide_w = 17;
-    }
-    if (hero.life==0) {
+      break;
+
+    case 0:
       state = State::GameOver;
-    }
+      break;
   }
 }
